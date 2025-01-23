@@ -2,7 +2,7 @@
 import AuthLayout from "@/layouts/AuthLayout.astro";
 
 const email = Astro.cookies.get("email")?.value ?? "";
-console.log(email); 
+console.log(email);
 const rememberMe = !!email;
 console.log(email, rememberMe);
 ---
@@ -97,6 +97,7 @@ console.log(email, rememberMe);
 
 <script>
   import { actions } from "astro:actions";
+  import Swal from "sweetalert2";
 
   const form = document.querySelector("form") as HTMLFormElement;
   const btnSubmit = document.querySelector("#btn-submit") as HTMLButtonElement;
@@ -105,13 +106,16 @@ console.log(email, rememberMe);
     e.preventDefault();
     btnSubmit.setAttribute("disabled", "disabled");
 
-    console.log("hola ");
-
     const formData = new FormData(form);
 
     const { data, error } = await actions.registerUser(formData);
 
     if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.message,
+      });
       console.log(error.message);
     }
 
